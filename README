@@ -1,0 +1,16 @@
+audacious2 cue sheet system
+
+This script serves as an alternative to audacious2's native cue sheet
+support, which is not exactly gapless.
+This script can list the tracks, identifying the currently played one
+and also lets the user skip to the beginning of a track.
+The cue sheet has to be in the same directory as the audio file, and
+must be correctly matched to it with the FILE line.
+
+The interface is interactive, press h for help.
+
+
+I tried to make error checking as solid as possible.
+Note to eval haters: this script makes use of it, and I did my best to
+sanitize the string it executes. If you find any flaw, please contact
+me.
