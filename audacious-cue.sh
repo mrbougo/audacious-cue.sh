@@ -134,7 +134,7 @@ sett() {
 getcue() {
 	local dir=$(dirname "$1")
 	# If no cue sheet is found, it fails thanks to /dev/null which never matches
-	for f in /dev/null "$dir"/*.cue; do
+	for f in "$dir"/*.cue /dev/null; do
 		grep -F -- "${1##*/}" "$f" > /dev/null && break
 	done || { err "No cue sheet found"; return 1; }
 	echo "$f"
