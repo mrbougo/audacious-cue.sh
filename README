@@ -1,4 +1,4 @@
-audacious2 cue sheet system
+audacious2 cue sheet system for audacious 2.2.x
 
 This script serves as an alternative to audacious2's native cue sheet
 support, which is not exactly gapless.
@@ -16,5 +16,4 @@ sanitize the string it executes. If you find any flaw, please contact
 me.
 
 Bugs:
- - Doesn't support a lot of special characters in filenames: audtool2
-   uri-encodes those on output.
+None known at the moment.

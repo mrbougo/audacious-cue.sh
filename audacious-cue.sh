@@ -3,7 +3,7 @@
 refresh=2  # refresh interval in watch mode
 
 #player settings
-pname=audacious2
+pname=audacious
 ST_stop=stopped
 ST_play=playing
 ST_pause=paused
@@ -63,7 +63,7 @@ cat << 'EOF'
 		title[track] = getval(2);
 	}
 
-	#audtool2 uses integer seconds (the manpage is a lie)
+	#audtool uses integer seconds (the manpage is a lie)
 	#using milliseconds to compare with the current position
 	$1 == "INDEX" {
 		split($3, idx, ":");
@@ -95,38 +95,38 @@ chkrun() {
 ### Player communication ###
 
 play() {
-	audtool2 --playback-play
+	audtool --playback-play
 }
 
 pause() {
-	audtool2 --playback-pause
+	audtool --playback-pause
 }
 
 getfn() {
-	local arr ret
-	audtool2  --current-song-filename | grep -v '^$' | grep '^file://' | sed 's|^file://||; s|%20| |g'
-	arr=(${PIPESTATUS[*]})
-	if [[ ${arr[1]} != 0 ]]; then
+	local audf
+	audf=$(audtool  --current-song-filename)
+	if [[ -z $audf ]]; then
 		err "No file opened."
 		return 2
-	elif [[ ${arr[2]} != 0 ]]; then
+	elif [[ ! -f $audf ]]; then
 		err "Not a local file."
 		return 3
 	fi
+	echo "$audf"
 	return 0
 }
 
 gett() {
-	audtool2 --current-song-output-length-frames
+	audtool --current-song-output-length-frames  #milliseconds
 }
 
 getstatus() {
-	audtool2 --playback-status
+	audtool --playback-status
 }
 
 sett() {
 	#seconds, not milliseconds
-	audtool2  --playback-seek $(($1/1000))
+	audtool  --playback-seek $(($1/1000))
 }
 
 ### Cue/data array manipulation ###
@@ -134,6 +134,7 @@ sett() {
 getcue() {
 	local dir=$(dirname "$1")
 	# If no cue sheet is found, it fails thanks to /dev/null which never matches
+	shopt -s nullglob
 	for f in "$dir"/*.cue /dev/null; do
 		grep -F -- "${1##*/}" "$f" > /dev/null && break
 	done || { err "No cue sheet found"; return 1; }
